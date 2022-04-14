@@ -22,5 +22,6 @@ def room(request, pk):
     """
     room = Room.objects.get(id=pk)
     context = {'room': room}
+    print (context)
     return render(request, 'base/room.html', context)
 # Create your views here.
