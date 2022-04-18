@@ -1,7 +1,10 @@
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.db.models import Q
-from .models import Room, Topic, User
+from .models import Room, Topic
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
 from .forms import RoomForm
 """""
 rooms = [
@@ -10,6 +13,31 @@ rooms = [
     {'id': 3, 'name': 'Let\' learn Javascript'},
 ]
 """
+
+def loginPage(request): #be careful because there are built in function name login
+    
+    if request.method == 'POST':
+        usernamee = request.POST.get('username')
+        password = request.POST.get('password')
+
+        try:
+            user = User.objects.get(username=usernamee)
+        except:
+            messages.error(request, 'User is not exist!')
+        
+        user = authenticate(request, username=usernamee, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, 'User name or password does not exist')
+    context={}
+    return render(request, 'base/login_register.html', context)
+
+def logoutUser(request):
+    logout(request)
+    return redirect('home')
 
 
 def home(request):
