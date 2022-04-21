@@ -5,3 +5,4 @@ class RoomForm(ModelForm):
     class Meta:
         model = Room
         fields = '__all__' # or a list ['name', 'body']
+        exclude = ['host', 'participants']
